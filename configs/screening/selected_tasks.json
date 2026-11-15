@@ -1,0 +1,58 @@
+{
+  "selection_file": "artifacts/screening_v1/selection.json",
+  "selected_tasks": [
+    {
+      "suite": "libero_spatial",
+      "task_id": 0,
+      "n_valid": 20,
+      "successes": 18,
+      "timeouts": 2,
+      "infrastructure_attempts": 0,
+      "complete": true,
+      "status": "selected",
+      "regions_file": "configs/regions_task0.json",
+      "eligibility_file": "configs/screening/eligibility/libero_spatial_0.json",
+      "results_file": "artifacts/screening_v1/libero_spatial_0/results.jsonl"
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 1,
+      "n_valid": 20,
+      "successes": 16,
+      "timeouts": 4,
+      "infrastructure_attempts": 0,
+      "complete": true,
+      "status": "selected",
+      "regions_file": "configs/screening/regions_libero_spatial_1.json",
+      "eligibility_file": "configs/screening/eligibility/libero_spatial_1.json",
+      "results_file": "artifacts/screening_v1/libero_spatial_1/results.jsonl"
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 2,
+      "n_valid": 20,
+      "successes": 18,
+      "timeouts": 2,
+      "infrastructure_attempts": 0,
+      "complete": true,
+      "status": "selected",
+      "regions_file": "configs/screening/regions_libero_spatial_2.json",
+      "eligibility_file": "configs/screening/eligibility/libero_spatial_2.json",
+      "results_file": "artifacts/screening_v1/libero_spatial_2/results.jsonl"
+    },
+    {
+      "suite": "libero_spatial",
+      "task_id": 3,
+      "n_valid": 20,
+      "successes": 19,
+      "timeouts": 1,
+      "infrastructure_attempts": 0,
+      "complete": true,
+      "status": "selected",
+      "regions_file": "configs/screening/regions_libero_spatial_3.json",
+      "eligibility_file": "configs/screening/eligibility/libero_spatial_3.json",
+      "results_file": "artifacts/screening_v1/libero_spatial_3/results.jsonl"
+    }
+  ],
+  "formal_collection_authorized": false
+}

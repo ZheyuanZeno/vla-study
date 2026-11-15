@@ -111,8 +111,11 @@ def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--config',required=True)
     parser.add_argument('--stop-after',type=int,default=None,help='Stop cleanly after this many new episodes; resume uses identical order')
     args=parser.parse_args(); config=yaml.safe_load(Path(args.config).read_text())
-    if config['study_phase'] not in ['mask_smoke','pilot','screening']:
-        raise ValueError('Formal collection is disabled until explicit protocol approval')
+    if config['study_phase']=='formal':
+        from scripts.formal_protocol import validate_run_config
+        validate_run_config(config)
+    elif config['study_phase'] not in ['mask_smoke','pilot','screening']:
+        raise ValueError('Unknown study phase')
     if not config['conditions'] or len(set(config['conditions']))!=len(config['conditions']) or not set(config['conditions'])<=set(CONDITIONS):
         raise ValueError('Invalid or duplicate conditions')
     if len(set(config['state_ids']))!=len(config['state_ids']) or not config['state_ids']:
@@ -132,13 +135,21 @@ def main():
     digest=hashlib.sha256(json.dumps({'config':config,'regions':regions},sort_keys=True).encode()).hexdigest()
     commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     root=Path(config['output_dir']); root.mkdir(parents=True,exist_ok=True)
-    sources=sorted(Path('src').rglob('*.py'))+[Path('requirements-lock.txt'),Path('configs/source_versions.json')]
-    code_hash=hashlib.sha256(b''.join(str(p).encode()+b'\0'+p.read_bytes() for p in sources)).hexdigest()
+    from scripts.formal_protocol import execution_code_hash
+    code_hash=execution_code_hash()
     manifest={'config_hash':digest,'code_hash':code_hash,'git_commit':commit,'config':config,'regions':regions}
     if (root/'manifest.json').exists():
         previous=json.loads((root/'manifest.json').read_text())
-        if previous['config_hash']!=digest or previous.get('code_hash')!=code_hash:
-            raise ValueError('Resume config/code differs from the frozen run; use a new output directory')
+        if previous['config_hash']!=digest:
+            raise ValueError('Resume config differs from the frozen run; use a new output directory')
+        if previous.get('code_hash')!=code_hash:
+            recover_interrupted(root)
+            historical=rebuild_index(root)
+            keys=[(r['state_id'],r['condition']) for r in historical if r['status']!='infrastructure_failure']
+            expected={(state,condition) for state in config['state_ids'] for condition in config['conditions']}
+            if len(keys)==len(set(keys)) and set(keys)==expected:
+                print('All episodes completed under their recorded code version; no inference run.'); return
+            raise ValueError('Partial run code differs; restore the recorded execution version to resume')
     else: atomic_json(root/'manifest.json',manifest)
     recover_interrupted(root)
     rows=rebuild_index(root)
@@ -186,6 +197,7 @@ def main():
             metadata={'suite':config['suite'],'task_id':config['task_id'],'state_id':state_id,'condition':condition,
                 'seed':config['seed'],'order_seed':config['order_seed'],'checkpoint_revision':revision,
                 'git_commit':commit,'code_hash':code_hash,'config_hash':digest,'study_phase':config['study_phase'],
+                'protocol_sha256':config.get('protocol_sha256'),
                 'data_origin':'real_rollout','attempt_dir':str(attempt),'runtime_flags':runtime_flags,
                 'machine_id':config.get('machine_id',socket.gethostname()),'config_version':config.get('config_version','v1')}
             atomic_json(attempt/'attempt_manifest.json',metadata)

@@ -94,6 +94,8 @@ def validate_protocol(path,require_approval=True):
 
 def validate_run_config(config):
     if config.get('study_phase')!='formal': raise ValueError('Formal config must be labelled formal')
+    if not config.get('protocol_file') or not Path(config['protocol_file']).is_file():
+        raise PermissionError('A frozen formal protocol and explicit approval are required')
     protocol=validate_protocol(config['protocol_file'],require_approval=True)
     if config['protocol_sha256']!=protocol['protocol_sha256']: raise ValueError('Wrong protocol hash in run config')
     task=next((t for t in protocol['tasks'] if (t['suite'],t['task_id'])==(config['suite'],config['task_id'])),None)

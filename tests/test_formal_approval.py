@@ -20,3 +20,7 @@ def test_protocol_fingerprint_detects_a_changed_sampling_plan():
     assert module.fingerprint(a)==a['protocol_sha256']
     b=dict(a,sample_size=100)
     assert module.fingerprint(b)!=a['protocol_sha256']
+
+
+def test_formal_run_without_a_frozen_protocol_is_rejected():
+    with pytest.raises(PermissionError):module.validate_run_config({'study_phase':'formal'})
