@@ -1,0 +1,109 @@
+{
+  "suite": "libero_spatial",
+  "task_id": 0,
+  "placement_destination": "plate_1",
+  "target_geom_ids": [
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203
+  ],
+  "target_geom_names": [
+    "plate_1_g0",
+    "plate_1_g1",
+    "plate_1_g2",
+    "plate_1_g3",
+    "plate_1_g4",
+    "plate_1_g5",
+    "plate_1_g6",
+    "plate_1_g7",
+    "plate_1_g8",
+    "plate_1_g9",
+    "plate_1_g10"
+  ],
+  "background_anchor": [
+    320,
+    460
+  ],
+  "background_allowed_geom_names": [
+    "table_visual"
+  ],
+  "source_image": "artifacts/segmentation/task0-state0/rgb_policy.png",
+  "state_id_for_anchor_review": 0,
+  "regions_version": "pilot-v1",
+  "conditions": {
+    "T1": {
+      "bbox": [
+        97,
+        348,
+        134,
+        385
+      ],
+      "side": 37,
+      "pixel_area": 1369,
+      "target_coverage": 0.257137490608565
+    },
+    "B1": {
+      "bbox": [
+        302,
+        442,
+        339,
+        479
+      ],
+      "side": 37,
+      "pixel_area": 1369,
+      "target_coverage": 0.0
+    },
+    "T2": {
+      "bbox": [
+        90,
+        341,
+        142,
+        393
+      ],
+      "side": 52,
+      "pixel_area": 2704,
+      "target_coverage": 0.5078888054094666
+    },
+    "B2": {
+      "bbox": [
+        294,
+        434,
+        346,
+        486
+      ],
+      "side": 52,
+      "pixel_area": 2704,
+      "target_coverage": 0.0
+    },
+    "T3": {
+      "bbox": [
+        83,
+        334,
+        148,
+        399
+      ],
+      "side": 65,
+      "pixel_area": 4225,
+      "target_coverage": 0.7592036063110443
+    },
+    "B3": {
+      "bbox": [
+        288,
+        428,
+        353,
+        493
+      ],
+      "side": 65,
+      "pixel_area": 4225,
+      "target_coverage": 0.0
+    }
+  }
+}

@@ -1,0 +1,12 @@
+study_phase: mask_smoke
+checkpoint: HuggingFaceVLA/smolvla_libero
+suite: libero_spatial
+task_id: 0
+state_ids: [0]
+conditions: [T1, B1]
+seed: 42
+order_seed: 20261115
+horizon: 280
+record_video: true
+regions_file: configs/regions_task0.json
+output_dir: artifacts/mask_smoke
