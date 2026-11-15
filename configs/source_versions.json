@@ -1,0 +1,29 @@
+{
+  "lerobot": {
+    "tag": "v0.4.4",
+    "commit": "8fff0fde7c79f23a93d845d1a50e985de01f8b8a"
+  },
+  "libero": {
+    "distribution": "hf-libero",
+    "version": "0.1.3",
+    "source_url": "https://pypi.org/project/hf-libero/0.1.3/",
+    "source_archive_sha256": "0d6b9a215a658db86f66c03d063d6d877d2e9f96d2d326cfa9f43ba4da4a6d5a",
+    "git_commit": null,
+    "note": "安装 PyPI 固定发行包；该包元数据未提供对应 Git commit，不编造。"
+  },
+  "checkpoint": {
+    "repo_id": "HuggingFaceVLA/smolvla_libero",
+    "revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102",
+    "snapshot_path": "/home/zy/vla_study/.cache/huggingface/hub/models--HuggingFaceVLA--smolvla_libero/snapshots/6721902bc4d61e50a3bfdb11dfb4cb626f05d102"
+  },
+  "assets": {
+    "repo_id": "lerobot/libero-assets",
+    "revision": "0b3ea86be5fe169d0fd036ae63d1070ec09e90f6",
+    "snapshot_path": "/home/zy/vla_study/.cache/huggingface/hub/datasets--lerobot--libero-assets/snapshots/0b3ea86be5fe169d0fd036ae63d1070ec09e90f6",
+    "installed_link": "/home/zy/miniconda3/envs/smolvla-libero/lib/python3.10/site-packages/libero/libero/assets"
+  },
+  "vision_language_base": {
+    "repo_id": "HuggingFaceTB/SmolVLM2-500M-Instruct",
+    "revision": "4cde9d208e19519c36917aa170fffc7e381aa0ad"
+  }
+}

@@ -27,3 +27,11 @@ bash scripts/run_baseline.sh
 ```
 
 T1/B1、Pilot 和分析命令将在相应阶段真实验收后加入，当前不提供占位成功输出。
+
+## 已验证（2026-11-15）
+
+Phase 1：真实 LIBERO reset/step、EGL 双摄像头和 CUDA 运算通过。
+Phase 2：任务 0、初始状态 0，75 步，success predicate=True。
+单个样本不代表整体成功率。官方 rollout 计时约 24 秒，含首次加载约 82 秒。
+证据：artifacts/baseline/20261115T191502Z/evidence.json；录像位于同目录 videos/。
+冻结配置：configs/baseline_frozen.json；完整依赖：requirements-lock.txt。
