@@ -8,6 +8,8 @@ if [ ! -f artifacts/environment.json ]; then
 fi
 python -c "import json; d=json.load(open('artifacts/environment.json')); assert d['status']=='passed' and d.get('simulator',{}).get('real_reset_and_step'), 'Phase 1 尚未通过'"
 python scripts/download_checkpoint.py
+python scripts/download_vlm.py
+export HF_HUB_OFFLINE=1
 checkpoint_path=$(python -c "import json; print(json.load(open('artifacts/checkpoint.json'))['snapshot_path'])")
 run_id=$(date -u +%Y%m%dT%H%M%SZ)
 mkdir -p "artifacts/baseline/$run_id"

@@ -9,4 +9,5 @@ order_seed: 20261115
 horizon: 280
 record_video: true
 regions_file: configs/regions_task0.json
-output_dir: artifacts/mask_smoke
+output_dir: artifacts/mask_smoke_v2
+config_version: v2-official-runtime-flags

@@ -58,3 +58,6 @@ EGL 是首选；只有看到实际 EGL 故障后再研究 OSMesa，不预先更�
 Conda Python 默认读取 ~/.local/lib/python3.10/site-packages，发现旧 rosbags 缺少 lz4。
 本项目设置 PYTHONNOUSERSITE=1，重新解析安装后 `pip check` 无错误。没有修改旧 ROS 包。
 GPU 真实矩阵运算通过：torch 2.7.1+cu126、CUDA runtime 12.6。
+
+辅助 VLM/processor revision 固定为 `4cde9d208e19519c36917aa170fffc7e381aa0ad`。
+Baseline 启动时通过 scripts/download_vlm.py 下载该固定快照，将项目私有缓存的 main alias 固定到它，再使用 HF_HUB_OFFLINE=1 评估，防止底座 tokenizer/processor 漂移。runner 同样检查该 alias 并离线加载。
