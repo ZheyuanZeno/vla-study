@@ -1,0 +1,31 @@
+{
+  "suite": "libero_spatial",
+  "task_id": 1,
+  "placement_destination": "plate_1",
+  "target_geom_names": [
+    "plate_1_g0",
+    "plate_1_g1",
+    "plate_1_g2",
+    "plate_1_g3",
+    "plate_1_g4",
+    "plate_1_g5",
+    "plate_1_g6",
+    "plate_1_g7",
+    "plate_1_g8",
+    "plate_1_g9",
+    "plate_1_g10"
+  ],
+  "background_anchor": [
+    190,
+    470
+  ],
+  "background_allowed_geom_names": [
+    "table_visual"
+  ],
+  "regions_version": "screening-v1",
+  "source_image": "artifacts/candidate_geometry/libero_spatial_1/original.png",
+  "state_id_for_anchor_review": 0,
+  "bddl_file": "/home/zy/miniconda3/envs/smolvla-libero/lib/python3.10/site-packages/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.bddl",
+  "bddl_goal": "\n    (And (On akita_black_bowl_1 plate_1))\n  )\n\n)\n",
+  "manipulated_object": "akita_black_bowl_1"
+}

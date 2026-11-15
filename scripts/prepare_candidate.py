@@ -36,12 +36,18 @@ def main():
             'background_allowed_geom_names':['table_visual'],'regions_version':'screening-v1',
             'source_image':str(output/'original.png'),'state_id_for_anchor_review':0,
             'bddl_file':str(bddl),'bddl_goal':goal,'manipulated_object':manipuland}
-        prepare_regions(env,obs,regions,'Baseline',output)
         from lerobot.policies.smolvla.modeling_smolvla import resize_with_pad
         import torch
         x=torch.tensor(np.flip(obs['pixels']['image'],axis=(0,1)).copy()).permute(2,0,1)[None].float()/255
         rgb=np.rint(resize_with_pad(x,512,512,pad_value=0)[0].permute(1,2,0).numpy()*255).astype(np.uint8)
         Image.fromarray(rgb).save(output/'original.png')
+        target_ids=[i for i,name in names.items() if name in target_names]
+        target=(seg[...,0]==int(mujoco.mjtObj.mjOBJ_GEOM))&np.isin(seg[...,1],target_ids)
+        overlay=rgb.copy();overlay[target]=[255,0,0]
+        Image.fromarray(overlay).save(output/'target_overlay.png')
+        np.save(output/'segmentation.npy',seg)
+        (output/'regions_proposed.json').write_text(json.dumps(regions,indent=2))
+        prepare_regions(env,obs,regions,'Baseline',output)
         pairs=json.loads((output/'mask_pairs.json').read_text())
         from src.masking.geometry import Square
         for condition in ['T1','T2','T3','B1','B2','B3']:

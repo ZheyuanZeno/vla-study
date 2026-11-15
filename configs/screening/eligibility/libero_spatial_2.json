@@ -1,0 +1,15 @@
+{
+  "suite": "libero_spatial",
+  "task_id": 2,
+  "decision": "eligible",
+  "placement_destination": "plate_1",
+  "reason": "BDDL goal and visible plate_1 segmentation reviewed; all three background sizes valid on all 50 native states.",
+  "regions_file": "configs/screening/regions_libero_spatial_2.json",
+  "audit_file": "artifacts/region_audit_spatial_2/audit.json",
+  "visual_evidence": [
+    "artifacts/candidate_geometry/libero_spatial_2/original.png",
+    "artifacts/candidate_geometry/libero_spatial_2/target_overlay.png",
+    "artifacts/candidate_geometry/libero_spatial_2/B3.png"
+  ],
+  "review_method": "actual RGB and simulator geom segmentation, reviewed by Codex before baseline screening"
+}
