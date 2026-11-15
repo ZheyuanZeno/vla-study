@@ -1,0 +1,15 @@
+{
+  "suite": "libero_spatial",
+  "task_id": 0,
+  "decision": "eligible",
+  "placement_destination": "plate_1",
+  "reason": "BDDL goal places the bowl on plate_1; visible destination segmentation and all three background sizes pass all 50 native reset states.",
+  "regions_file": "configs/regions_task0.json",
+  "audit_file": "artifacts/region_audit_task0/audit.json",
+  "visual_evidence": [
+    "artifacts/segmentation/task0-state0/rgb_policy.png",
+    "artifacts/segmentation/task0-state0/target_overlay.png",
+    "artifacts/segmentation/task0-state0/B3.png"
+  ],
+  "review_method": "actual RGB and simulator geom segmentation, reviewed by Codex; no occlusion outcome used"
+}
