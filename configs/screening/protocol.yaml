@@ -72,3 +72,5 @@ eligibility: fixed placement destination, visible target and frozen legal backgr
   for all three sizes
 data_use: screening_only_never_formal
 formal_collection_authorized: false
+post_selection_pilot_state_id: 20
+post_selection_pilot_uses_occlusion_for_task_selection: false
