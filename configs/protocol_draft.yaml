@@ -6,23 +6,77 @@ checkpoint:
   revision: 6721902bc4d61e50a3bfdb11dfb4cb626f05d102
 lerobot_commit: 8fff0fde7c79f23a93d845d1a50e985de01f8b8a
 libero_distribution: hf-libero==0.1.3
-candidate_order: null  # 需 Research Plan 中的 suite/ID 顺序
-selected_tasks: null  # 前四个符合几何条件且 Baseline 20 次至少成功 10 次的任务
+candidate_order:
+- suite: libero_spatial
+  task_id: 0
+- suite: libero_spatial
+  task_id: 1
+- suite: libero_spatial
+  task_id: 2
+- suite: libero_spatial
+  task_id: 3
+- suite: libero_spatial
+  task_id: 4
+- suite: libero_spatial
+  task_id: 5
+- suite: libero_spatial
+  task_id: 6
+- suite: libero_spatial
+  task_id: 7
+- suite: libero_spatial
+  task_id: 8
+- suite: libero_spatial
+  task_id: 9
+- suite: libero_object
+  task_id: 0
+- suite: libero_object
+  task_id: 1
+- suite: libero_object
+  task_id: 2
+- suite: libero_object
+  task_id: 3
+- suite: libero_object
+  task_id: 4
+- suite: libero_object
+  task_id: 5
+- suite: libero_object
+  task_id: 6
+- suite: libero_object
+  task_id: 7
+- suite: libero_object
+  task_id: 8
+- suite: libero_object
+  task_id: 9
+selected_tasks: null
 screening_episodes_per_task: 20
 screening_min_successes: 10
 available_native_states_per_candidate: 50
 new_state_generation_validated: false
-sample_size_per_task: null  # 100 需先验证新状态；50 为待批准备选
+sample_size_per_task: null
 state_lists: null
-state_pool_overlap_policy: null  # 需明确 Pilot/筛选与正式状态池关系
+state_pool_overlap_policy: null
 mask:
-  conditions: [Baseline, T1, T2, T3, B1, B2, B3]
-  coverage_thresholds: [0.25, 0.50, 0.75]
-  color_rgb: [128, 128, 128]
+  conditions:
+  - Baseline
+  - T1
+  - T2
+  - T3
+  - B1
+  - B2
+  - B3
+  coverage_thresholds:
+  - 0.25
+  - 0.5
+  - 0.75
+  color_rgb:
+  - 128
+  - 128
+  - 128
   geometry: fixed_centroid_square
-  placement_destination_definitions: null  # 当前只验证 task0 的 plate_1
+  placement_destination_definitions: null
   background_anchors: null
-  reviewed_region_files: [configs/regions_task0.json]
+  reviewed_region_files:
+  - configs/regions_task0.json
 inference:
   batch_size: 1
   n_envs: 1
@@ -36,7 +90,9 @@ inference:
   order_seed: 20261115
   control_mode: relative
   horizon: 280
-  image_size_after_resize: [512, 512]
+  image_size_after_resize:
+  - 512
+  - 512
 analysis:
   bootstrap_replicates: 5000
   bootstrap_seed: 20261115
@@ -53,3 +109,4 @@ exclusions:
   duplicate_independent_units: forbidden
   pilot_or_screening_data_in_formal_analysis: forbidden
 formal_entrypoint_enabled: false
+candidate_order_confirmed_by_user: true
