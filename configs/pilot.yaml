@@ -9,4 +9,5 @@ order_seed: 20261115
 horizon: 280
 record_video: true
 regions_file: configs/regions_task0.json
-output_dir: artifacts/pilot_block001
+output_dir: artifacts/pilot_block002
+config_version: v2-official-runtime-flags

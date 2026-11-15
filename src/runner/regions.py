@@ -32,6 +32,7 @@ def prepare_regions(env, observation, regions, condition, output):
     overlay=np.rint(resized*255).astype(np.uint8); overlay[target]=[255,0,0]
     Image.fromarray(overlay).save(output/'target_overlay.png')
     np.save(output/'target_pixels.npy',target)
+    np.save(output/'background_allowed.npy',allowed)
     np.save(output/'segmentation.npy',seg)
     (output/'mask_pairs.json').write_text(json.dumps(geometry,indent=2))
     return (None if condition=='Baseline' else squares[condition]),geometry.get(condition)
