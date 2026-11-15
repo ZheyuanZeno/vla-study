@@ -35,3 +35,16 @@ Phase 2：任务 0、初始状态 0，75 步，success predicate=True。
 单个样本不代表整体成功率。官方 rollout 计时约 24 秒，含首次加载约 82 秒。
 证据：artifacts/baseline/20261115T191502Z/evidence.json；录像位于同目录 videos/。
 冻结配置：configs/baseline_frozen.json；完整依赖：requirements-lock.txt。
+
+Phase 3 已验证：同状态 T1、B1 都完成真实 rollout（各 79 步，success=True）。
+
+```bash
+source scripts/activate.sh
+python -m src.runner.run --config configs/mask_smoke.yaml
+python -m src.runner.run --config configs/pilot.yaml
+```
+
+每份输出 manifest 固定配置和 Git commit；代码改变后须使用新目录。
+状态 ID 不允许模运算绕回。同一 block 每个条件的 seed 在 rollout 前重置；条件顺序单独随机化。
+官方 Phase 2 的 seed 在模型初始化前设置，因此其随机流起点与 Pilot 不同；该诊断样本和 mask smoke 都不混入 Pilot 或正式分析。
+遮挡坐标、分割兼容处理和 hook 见 [遮挡说明](docs/masking.md)。

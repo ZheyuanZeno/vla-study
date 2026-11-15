@@ -47,6 +47,9 @@ def execute_episode(vec,policy,processors,config,regions,state_id,condition,outp
             context['square'],context['geometry']=prepare_regions(env,obs,regions,condition,output)
             context['ready']=True
             np.save(output/'initial_state.npy',state)
+            settled=np.asarray(env._env.get_sim_state())
+            np.save(output/'settled_state.npy',settled)
+            context['settled_state_sha256']=hashlib.sha256(settled.tobytes()).hexdigest()
             for key,rgb in obs['pixels'].items(): Image.fromarray(rgb).save(output/f'raw_{key}.png')
             if config['record_video']: frames.append(np.flip(obs['pixels']['image'],axis=(0,1)).copy())
         return obs,info
@@ -89,6 +92,7 @@ def execute_episode(vec,policy,processors,config,regions,state_id,condition,outp
         env.reset,env.step=original_reset,original_step
         result.update(env_steps=len(steps),elapsed_time=time.monotonic()-started,
             gpu_peak_allocated_bytes=torch.cuda.max_memory_allocated(),gpu_peak_reserved_bytes=torch.cuda.max_memory_reserved())
+        result['settled_state_sha256']=context.get('settled_state_sha256')
         result['mask_geometry']=context['geometry']
         result['target_coverage']=None if context['geometry'] is None else context['geometry']['target_coverage']
         (output/'steps.jsonl').write_text(''.join(json.dumps(s)+'\n' for s in steps))
