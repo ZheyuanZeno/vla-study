@@ -1,0 +1,7 @@
+name: smolvla-libero
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+# 先安装 cu126 torch，再按 docs/installation.md 安装锁定依赖。

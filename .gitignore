@@ -1,0 +1,7 @@
+vendor/
+.cache/
+.runtime/
+__pycache__/
+*.pyc
+artifacts/
+logs/

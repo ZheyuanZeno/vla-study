@@ -1,0 +1,470 @@
+# 任务：在 Ubuntu 22.04 上实现 SmolVLA + LIBERO 视觉遮挡鲁棒性实验
+
+你现在是我的 AI Robotics Research Engineer 和本地开发助手。
+
+请直接在当前 VS Code 工作区中开展工程实施，不要只给我理论建议。你需要检查系统、检索官方文档、编写代码、安装依赖、执行测试、定位错误，最终让真实实验在我的电脑上运行起来。
+
+**本项目禁止使用 Docker、容器、远程服务器和付费云计算。全部实验在本地 Ubuntu 上进行。**
+
+## 一、我的硬件环境
+
+已知信息：
+
+- 操作系统：Ubuntu 22.04
+- GPU：NVIDIA RTX 3060 Laptop GPU
+- 显存：6GB
+- Python：之前安装过 Conda 和 Python 3.12
+- 开发工具：VS Code + Codex
+- 系统中可能已有 `vlaBaseline` Conda 环境
+- 本地 NVIDIA 驱动和 CUDA 环境以前已经配置过
+
+注意：以上信息可能发生变化。首先通过终端检测实际环境，不要直接假设驱动、CUDA 或 PyTorch 版本。
+
+优先创建一个专用 Conda 环境，例如 `smolvla-libero`，避免破坏已有环境。
+
+不要擅自升级 NVIDIA 驱动、CUDA 驱动、Ubuntu 内核，也不要修改系统级 Python。
+
+涉及 sudo、删除现有环境或破坏性操作时，先说明原因并获得我的同意。
+
+## 二、研究背景
+
+研究题目：
+
+Evaluating Visual Occlusion Robustness of a Lightweight Vision-Language-Action Model
+
+原始 Research Plan 如已提供，请先阅读。以下为实验的必要约束。
+
+我们的研究目的是：
+
+评估固定 SmolVLA 模型在 LIBERO 机器人操作任务中，对不同视觉遮挡位置和遮挡大小的鲁棒性。
+
+主要研究问题：
+
+RQ1：目标区域遮挡与背景区域遮挡对任务成功率的影响有何差异？
+
+RQ2：随着遮挡范围增加，这种成功率差异如何变化？
+
+实验不训练或微调模型，只使用固定的预训练 checkpoint 执行推理。
+
+计划使用的模型：
+
+`HuggingFaceVLA/smolvla_libero`
+
+模型地址：
+https://huggingface.co/HuggingFaceVLA/smolvla_libero
+
+LeRobot：
+https://github.com/huggingface/lerobot
+
+官方 LIBERO 文档：
+https://huggingface.co/docs/lerobot/main/en/libero
+
+LIBERO：
+https://github.com/Lifelong-Robot-Learning/LIBERO
+
+请先核实这些项目目前的安装说明、API、兼容版本和实际代码。不要盲目套用过期教程，也不要假设 GitHub main 分支必然兼容。
+
+## 三、总目标与实施顺序
+
+项目必须依次完成以下阶段：
+
+Phase 1：本地环境搭建
+
+Phase 2：运行真实 Baseline
+
+Phase 3：实现 Visual Masking
+
+Phase 4：执行小规模配对 Pilot
+
+Phase 5：实现完整实验执行器与结果分析
+
+Phase 6：完成正式实验前的协议检查
+
+每个阶段都需要真实验证，再进入下一阶段。
+
+不要一开始就运行上千次实验。
+
+不要用随机生成的成功率、模拟输出或伪造日志来声称实验成功。
+
+如果遇到技术障碍，先根据报错和实际安装代码排查，再考虑最小范围的修改。
+
+## 四、Phase 1：环境搭建
+
+首先检查：
+
+1. Ubuntu 版本、内核、CPU、RAM。
+2. NVIDIA GPU、显存、驱动、CUDA 兼容性。
+3. Conda、Python、pip、PyTorch 状态。
+4. 现有项目目录和环境。
+5. 可用磁盘空间。
+6. 能否访问 Hugging Face 和 GitHub。
+
+制定可复现的依赖安装方案。
+
+优先使用 Conda 隔离 Python 环境，必要时使用 pip 安装兼容的软件包。
+
+检查 LeRobot、LIBERO、robosuite、MuJoCo、Transformers、PyTorch 和其他依赖的版本兼容性。
+
+重点注意：
+
+- Ubuntu 22.04 原生运行
+- NVIDIA 6GB 显存限制
+- headless MuJoCo 渲染
+- EGL 与 OSMesa 的兼容性
+- 模型 checkpoint 与 LeRobot 预处理管线的兼容性
+
+优先尝试 `MUJOCO_GL=egl`，出现渲染问题时根据实际错误排查，必要时尝试 OSMesa。
+
+记录完整依赖版本、Git commits、模型 revision 和安装过程。
+
+生成：
+
+- `environment.yml` 或等效依赖文件
+- `scripts/check_environment.py`
+- `docs/installation.md`
+
+验收标准：
+
+Python 可以成功导入相关库，PyTorch 能检测 GPU，LIBERO 能加载任务和完成 reset，MuJoCo 可以在无窗口模式下渲染 RGB 图像。
+
+## 五、Phase 2：Baseline 验证
+
+使用真实的 `HuggingFaceVLA/smolvla_libero` checkpoint。
+
+使用官方 LeRobot LIBERO evaluation 接口作为起点。
+
+先在 LIBERO-Spatial 中选择一个任务，只运行 1 个 episode。
+
+建议从类似以下官方命令开始，但必须先核对当前版本支持的参数：
+
+```bash
+export MUJOCO_GL=egl
+
+lerobot-eval \
+  --policy.path=HuggingFaceVLA/smolvla_libero \
+  --env.type=libero \
+  --env.task=libero_spatial \
+  --env.task_ids='[0]' \
+  --eval.batch_size=1 \
+  --eval.n_episodes=1 \
+  --env.max_parallel_tasks=1
+```
+
+必须验证：
+
+- 成功加载真实 checkpoint
+- 真实 LIBERO 模拟器完成 reset
+- 正确获取外部摄像头、腕部摄像头和机器人状态
+- 图像、语言指令与机器人状态输入符合 checkpoint 要求
+- 模型确实执行 GPU 推理
+- 输出动作正确传递给机器人
+- 模拟器能够正常 step
+- 能够读取任务的真实 success predicate
+- 能够执行完整 episode 或正常 timeout
+- 能够保存实际执行结果
+
+注意：
+
+任务失败不等于程序运行失败。
+
+如果机械臂完成有效运动、正确执行动作但没完成任务，属于一次有效失败样本。
+
+如果程序崩溃、动作维度错误或模型没有真正执行推理，则属于技术故障。
+
+6GB 显存下首先使用 batch size = 1、一个模拟环境和一次推理请求。
+
+如果出现 CUDA OOM，先诊断显存占用。可以研究模型官方支持的低显存运行方法，但不要在没有记录的情况下改变模型权重、输入语义或推理设置。
+
+尽量保存一段真实 Baseline rollout 视频，以及模型实际接收的 camera inputs。
+
+Phase 2 验收标准：
+
+能够通过一条命令重复运行完整的真实 Baseline episode，并产生可信的 success/failure、日志和可查看的图像或视频。
+
+确认后将 Baseline 配置和代码版本保存下来。
+
+## 六、Phase 3：实现 Visual Masking
+
+需要在模型接收的外部摄像头图像中添加遮挡。
+
+所有遮挡必须在图像 resize 之后、normalization 之前完成。
+
+不能只修改录像画面。
+
+不能修改模拟器的真实物理场景。
+
+不能对腕部摄像头、机器人状态或语言指令添加遮挡。
+
+实验一共七种条件：
+
+| Condition | Mask location | Severity |
+|---|---|---|
+| Baseline | None | None |
+| T1 | Target region | Small |
+| T2 | Target region | Medium |
+| T3 | Target region | Large |
+| B1 | Background | Small |
+| B2 | Background | Medium |
+| B3 | Background | Large |
+
+遮挡参数：
+
+- 形状：正方形
+- 颜色：RGB (128, 128, 128)
+- 不透明度：100%
+- 边界：硬边界，不进行 blending
+- 在同一 episode 内位置和尺寸固定
+- 在每次 policy observation 中持续应用
+
+Target region 定义为机器人需要将物体放入或放置到的固定目标区域。
+
+不使用任意物体或机器人本体作为替代。
+
+遮挡大小需要覆盖目标区域可见像素的至少：
+
+- Small：25%
+- Medium：50%
+- Large：75%
+
+优先尝试获取模拟器 segmentation，确保与实际摄像头视角和图像尺寸对应，并通过 nearest-neighbour interpolation 调整分割图。
+
+对于每个目标区域，基于 reset 后可见目标像素质心，计算满足对应覆盖率的最小整数边长正方形。
+
+如果无法可靠取得 segmentation，可以实现手动标注初始帧 polygon 的备用方案。该方案必须保留真实图像依据和可视化验证，不能随意猜测目标坐标。正式实验前还需要由另一位研究者独立检查。
+
+Background mask：
+
+- 使用与对应 T 条件完全相同的宽高和颜色
+- 位置选择在任务无关背景区域
+- 每个任务的背景 anchor 在 Pilot 阶段确定并冻结
+- 检查不会在 reset 时覆盖目标、操作物体、机器人或其他任务相关地标
+- 检查三个大小都在图像边界内
+
+需要保存：
+
+- 原始 RGB 图像
+- 实际进入 policy 的 masked RGB 图像
+- mask bounding box
+- mask pixel area
+- target coverage
+- background anchor
+- 相应任务和初始状态的 ID
+
+增加可视化检查和自动化单元测试，验证 T/B 成对的几何尺寸完全相等，且零面积 Mask 不改变输入。
+
+Phase 3 验收标准：
+
+同一个真实 LIBERO 初始状态，可以完成一次 T1 和 B1 的完整机器人 rollout，并保存正确遮挡的实际模型输入。
+
+## 七、Phase 4：小规模配对 Pilot
+
+在确认 Masking 功能可靠后，实现完整七条件配对运行。
+
+配对单位是一个 LIBERO 任务的同一个初始状态。
+
+同一初始状态需要分别运行：
+
+Baseline、T1、T2、T3、B1、B2、B3。
+
+要求：
+
+- 七种条件使用相同初始状态
+- 固定 checkpoint
+- 固定任务指令
+- 固定控制模式与 horizon
+- 条件之间 reset simulator
+- 清空模型 action queues 和 policy caches
+- 条件顺序根据记录的随机种子随机化
+- 图像 Mask 仅影响对应的 policy observation
+- 每次 rollout 独立记录真实结果
+
+首先只测试 1 个任务 × 1 个初始状态 × 7 个条件。
+
+只有这 7 次全部完成后，再扩展到多个状态。
+
+检查 LIBERO 现有初始状态集合：
+
+- 有多少独立初始状态？
+- 是否能够准确加载同一个状态？
+- 是否能够确保同一个初始状态配对？
+- 是否可以合法、可靠地生成更多初始状态？
+- 不同初始状态是否真的不同？
+
+不要将完全相同的确定性执行重复多次，视为新的独立实验样本。
+
+对候选任务的正式筛选，应按照 Research Plan 中规定的 LIBERO-Spatial 和 LIBERO-Object 的任务 ID 顺序进行。
+
+任务必须具有固定的 placement destination、可见目标及合法背景 Mask。
+
+Baseline 的试验性筛选标准为每个任务 20 个未遮挡 episode 中至少成功 10 次。最终选择前四个满足条件的任务，记录排除原因。
+
+不要根据哪个任务的遮挡效果更显著来挑选任务。
+
+Pilot 结果不能混入正式实验统计。
+
+## 八、Phase 5：完整实验执行器
+
+实现一个可配置的 Python CLI，例如：
+
+```bash
+python -m src.runner.run \
+  --config configs/pilot.yaml
+```
+
+具体接口可以根据项目结构调整，但需要保持简单和清晰。
+
+功能要求：
+
+- 根据配置加载 checkpoint 和任务
+- 选择指定 initial states
+- 自动执行七个实验条件
+- 支持实验条件随机顺序
+- 支持单任务、指定状态子集运行
+- 支持实验中断后恢复
+- 避免重复记录已完成的结果
+- 技术故障与任务失败分别处理
+- 自动保存 JSONL 或 CSV
+- 按需录制视频和关键帧
+- 记录显存峰值与运行耗时
+- 支持机器 ID 和实验配置版本
+
+一个完整状态组的结果必须能够验证七个条件是否全部存在。
+
+日志至少包含：
+
+task_id, state_id, condition, success, seed, mask_geometry, target_coverage, env_steps, elapsed_time, machine_id, checkpoint_revision, git_commit, config_hash, error_type
+
+日志中必须区分：
+
+1. success
+2. valid task failure
+3. task timeout
+4. infrastructure failure
+
+不要为了提高成功率而删除失败样本。
+
+## 九、Phase 5：统计分析
+
+分析模块单独实现，和模拟器执行解耦。
+
+主要指标：
+
+Success Rate
+
+以及每个 mask-size level 的：
+
+Gap = SR_background - SR_target
+
+正值意味着目标遮挡带来的成功率下降更严重。
+
+四个任务应分别计算，再对四个任务的差值取等权平均。
+
+按照 Research Plan，使用 5,000 次 paired bootstrap。
+
+同一个 initial-state block 的七种条件必须作为整体重采样，不能把七次 rollout 当成独立样本。
+
+在每个任务内部进行 bootstrap，再对四个任务等权汇总。
+
+输出：
+
+- 每种条件的 Success Rate
+- 每个任务的 T/B Gap
+- 四任务平均 Gap
+- pointwise 95% bootstrap percentile interval
+- Large Gap - Small Gap
+- Mask severity 对成功率的影响图
+- 四个任务的单独结果图
+- Baseline 与遮挡实验的比较图
+
+统计代码可以先用明确标记为 synthetic 的测试数据开发，但最终报告只能使用真实 rollout 结果。
+
+## 十、Phase 6：正式实验准备
+
+计划的正式实验规模：
+
+- 首选：4 tasks × 7 conditions × 100 states = 2800 rollouts
+- 备选：4 tasks × 7 conditions × 50 states = 1400 rollouts
+
+正式样本量不是现在立即执行的任务。
+
+必须先记录：
+
+- 真实 Baseline 性能
+- 每个候选任务可用的独立初始状态数
+- 七条件运行是否稳定
+- 单次 rollout 平均时间
+- GPU 峰值显存
+- 预计总运行时间
+- 技术故障率
+- 是否需要缩减实验规模
+
+在正式采集前冻结：
+
+- checkpoint revision
+- LeRobot/LIBERO 版本
+- 任务列表
+- Masking 代码和区域定义
+- 初始状态列表
+- inference settings
+- task horizon
+- action execution horizon
+- 样本量
+- exclusions
+- analysis protocol
+
+**未经我的明确批准，不要自动启动 1400 或 2800 次正式实验。**
+
+## 十一、工程规范
+
+请使用模块化结构，避免把全部功能放到一个大型 Python 文件里。
+
+优先调用 LeRobot 和 LIBERO 官方接口，尽量不要直接修改上游库源码。
+
+需要自定义 Masking 或 rollout 时，请先阅读相关代码，找出正确的 hook 或 observation preprocessing 位置。
+
+不要为了让代码运行而编造 API、跳过真实推理或用假的 action/success 替代。
+
+不要忽略异常后继续把技术失败记录为正常数据。
+
+重要依赖固定版本，重要配置保存到文件。
+
+所有实验指令必须能在 VS Code 终端执行。
+
+工程文档使用中文，代码、配置键名和日志字段可以使用英文。
+
+项目应包含 README，清楚说明从一个新终端如何激活环境、运行 Baseline、运行 Pilot 和分析结果。
+
+## 十二、现在开始执行
+
+先执行 Phase 1。
+
+你可以自行读取工作区、运行无破坏性的检测命令、检索官方文档、编写文件和执行必要的验证。
+
+不要只输出一份项目规划后停止。
+
+在保证已有环境安全的前提下，尽可能继续实施直到遇到真正需要我处理的权限、下载、资源或兼容性问题。
+
+每完成一个阶段，给我简短汇报：
+
+1. 已成功验证什么
+2. 修改或新增了哪些文件
+3. 实际运行了哪些命令
+4. 测试结果及日志位置
+5. 尚未解决的问题
+6. 下一步要做什么
+
+严格区分：
+
+- 代码已写好
+- 单元测试通过
+- 模拟器真实运行成功
+- 完整 rollout 成功
+- 实验数据有效
+
+不能把上述状态混为一谈。
+
+**最优先的近期目标：在我的 Ubuntu 22.04 + RTX 3060 6GB 上，完成一个真实 SmolVLA + LIBERO Baseline rollout。**
+
+接着实现最简单的一组 T1/B1 遮挡测试，再扩展到七条件。
+
+现在从系统检查、兼容版本确认、Conda 环境准备开始实际执行。
