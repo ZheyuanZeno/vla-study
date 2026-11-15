@@ -4,7 +4,7 @@
 
 已完成：原生 Ubuntu/CUDA/EGL 与真实模型验证；任务 0 的真实 Baseline；同状态 T1/B1；任务 0 的七条件 Pilot；20 个候选任务的状态池读取；单元测试验证 paired bootstrap 和统计隔离。最新 Pilot 的运行设置记录在其 inference_settings.json，阶段证据分别保留，不合并成独立样本。
 
-尚未完成：Research Plan 规定的候选任务 suite/ID 顺序确认；按该顺序做每任务 20 次 Baseline 筛选；四任务的 placement destination 与背景 anchor 验证；四任务的状态列表与排除准则冻结；用户明确批准正式样本量。不会根据哪个任务遮挡差异更大进行选择。
+尚未完成：按已确认顺序（Spatial 0–9，再 Object 0–9）做每任务 20 次 Baseline 筛选；四任务的 placement destination 与背景 anchor 验证；四任务的状态列表与排除准则冻结；用户明确批准正式样本量。不会根据哪个任务遮挡差异更大进行选择。
 
 ## 状态数量限制
 
@@ -34,4 +34,4 @@ PyTorch 显存分配峰值与 nvidia-smi 整机占用口径不同，后者还包
 - 任务 0 在全部 50 个原生状态上完成真实 reset/segmentation 区域审计，三档 T/B 均合法；这不是 50 次 policy rollout。证据为 artifacts/region_audit_task0/audit.json。
 - 14 项单元/导出测试通过，日志 logs/tests-final.log；统计 fixtures 明确 synthetic，不是实验数据。
 
-Phase 1–3 的真实运行证据已齐备；Phase 4 的单状态七条件 Pilot 已通过，但任务正式筛选尚未执行。Phase 5 的执行器和统计模块已实现并验证上述范围，尚无四任务正式统计。Phase 6 是未完成草案，等待任务顺序、筛选、状态池和样本量等协议确认。
+Phase 1–3 的真实运行证据已齐备；Phase 4 的单状态七条件 Pilot 已通过，但任务正式筛选尚未执行。Phase 5 的执行器和统计模块已实现并验证上述范围，尚无四任务正式统计。Phase 6 是未完成草案，任务顺序已经用户确认，筛选进行中；状态池和正式样本量等仍待协议确认。

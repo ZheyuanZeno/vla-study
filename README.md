@@ -33,7 +33,7 @@ runner 使用官方 LeRobot rollout、环境与 checkpoint processors；固定 p
 
 每个输出目录包含 manifest.json、inference_settings.json、execution_order.json、results.jsonl、completeness.json。episode 目录含真实 initial/settled state、实际 resize 后 original/masked RGB float arrays 和 PNG、目标分割、bbox/面积/覆盖率、真实动作、结果与视频。JSONL 是可重建索引，原始 result.json 为逐 attempt 原子写入记录。
 
-小规模执行默认最多 7 次。多状态 Pilot 须先通过真实七条件 gate，再显式设置 max_rollouts、pilot_gate_dir 和状态子集。筛选可使用单任务 Baseline 配置（20 状态，max_rollouts=20）；但候选顺序和几何资格尚待 Research Plan 确认。正式采集入口禁用，不会自动执行 1400/2800 次。
+小规模执行默认最多 7 次。多状态 Pilot 须先通过真实七条件 gate，再显式设置 max_rollouts、pilot_gate_dir 和状态子集。筛选可使用单任务 Baseline 配置（20 状态，max_rollouts=20）；用户已确认 Spatial 0–9、再 Object 0–9；正在按该顺序检查几何资格并运行筛选，详情见 docs/screening.md。正式采集入口禁用，不会自动执行 1400/2800 次。
 
 原生 Spatial/Object 各 10 个任务均有 50 个精确不同的初始状态；完整 inventory 在 artifacts/state_inventory.json。不通过取模或重复同一确定性执行凑 100 个样本。
 
