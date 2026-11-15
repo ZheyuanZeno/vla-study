@@ -43,12 +43,16 @@ for selected in selection['selected']:
         'formal_output_dir':f'artifacts/formal_v1/{slug}','formal_config_file':str(config_dir/f'{slug}.yaml')}
     tasks.append(task)
 mean_seconds=sum(durations)/len(durations)
+protocol_path=Path('configs/formal50_protocol.json')
+previous=json.loads(protocol_path.read_text()) if protocol_path.exists() else None
+execution_commit=(previous['execution_git_commit'] if previous and previous['execution_code_hash']==execution_code_hash()
+                  else subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 protocol={'version':'formal50-proposal-v1','sample_size_per_task':50,'planned_rollouts':1400,
     'state_pool_type':'native','conditions':CONDITIONS,'tasks':tasks,
     'checkpoint_revision':source['checkpoint']['revision'],
     'vision_language_base_revision':source['vision_language_base']['revision'],
     'execution_code_hash':execution_code_hash(),
-    'execution_git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+    'execution_git_commit':execution_commit,
     'dependency_versions':{p:metadata.version(p) for p in ['torch','torchvision','transformers','lerobot','hf-libero','mujoco','robosuite','numpy']},
     'selection_file':str(selection_file),'selection_sha256':file_sha(selection_file),
     'state_inventory_file':str(inventory_file),'state_inventory_sha256':file_sha(inventory_file),
