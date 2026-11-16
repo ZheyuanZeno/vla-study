@@ -34,6 +34,6 @@ python -m src.runner.verify --root artifacts/pilot_fresh_v1/libero_spatial_0
 
 执行器记录 raw state、完整状态包 ID、设施快照、环境 seed、policy seed、CUDA RNG 起点和重载误差；自动 cleanup reset 也回到当前单位，保持 seed/设施一致。分析程序拒绝七条件完整状态包不同或同一物理单位换 ID 重复计数。
 
-生成审计不等于完整 model rollout。只有保留状态的真实七条件 Pilot 完成并通过核验，才会生成新的 100 状态/2800 次方案或取前 50 状态/1400 次方案。两者均需要用户明确批准后才执行正式采集。
+生成审计不等于完整 model rollout。保留状态的真实七条件 Pilot 已完成 28 条（25 success、3 timeout、0 技术故障），完整状态包、随机数起点、实际输入与全部录像核验通过。新的 100 状态/2800 次及取前 50 状态/1400 次方案均已冻结并通过只读检查，见 [方案审阅](formal_proposal.md)。两者均需要用户明确批准后才执行正式采集。
 
-原生 50 状态方案的归档对应当时的执行代码版本；新增池接入后会冻结新的 100 状态方案和新的 50 状态子集方案。生成清单中的 policy_inference_performed=false 指生成/筛选过程没有调用 policy；后续专用 Pilot ID 100 的实际使用由独立 rollout 日志记录，清单保持不可变。
+原生 50 状态方案的归档对应当时的执行代码版本；新增池接入后已冻结新的 100 状态方案和新的 50 状态子集方案。生成清单中的 policy_inference_performed=false 指生成/筛选过程没有调用 policy；后续专用 Pilot ID 100 的实际使用由独立 rollout 日志记录，清单保持不可变。

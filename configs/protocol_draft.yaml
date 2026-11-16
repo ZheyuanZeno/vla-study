@@ -1,5 +1,5 @@
-protocol_version: draft-2026-11-15
-status: incomplete_do_not_collect_formal
+protocol_version: readiness-2026-11-16
+status: frozen_proposals_awaiting_explicit_user_approval
 user_formal_approval: false
 checkpoint:
   repo: HuggingFaceVLA/smolvla_libero
@@ -47,14 +47,427 @@ candidate_order:
   task_id: 8
 - suite: libero_object
   task_id: 9
-selected_tasks: null
+selected_tasks:
+- suite: libero_spatial
+  task_id: 0
+- suite: libero_spatial
+  task_id: 1
+- suite: libero_spatial
+  task_id: 2
+- suite: libero_spatial
+  task_id: 3
 screening_episodes_per_task: 20
 screening_min_successes: 10
 available_native_states_per_candidate: 50
-new_state_generation_validated: false
-sample_size_per_task: null
-state_lists: null
-state_pool_overlap_policy: null
+new_state_generation_validated: true
+sample_size_per_task: 100
+state_lists:
+  libero_spatial_0:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 49
+  - 50
+  - 51
+  - 52
+  - 53
+  - 54
+  - 55
+  - 56
+  - 57
+  - 58
+  - 59
+  - 60
+  - 61
+  - 62
+  - 63
+  - 64
+  - 65
+  - 66
+  - 67
+  - 68
+  - 69
+  - 70
+  - 71
+  - 72
+  - 73
+  - 74
+  - 75
+  - 76
+  - 77
+  - 78
+  - 79
+  - 80
+  - 81
+  - 82
+  - 83
+  - 84
+  - 85
+  - 86
+  - 87
+  - 88
+  - 89
+  - 90
+  - 91
+  - 92
+  - 93
+  - 94
+  - 95
+  - 96
+  - 97
+  - 98
+  - 99
+  libero_spatial_1:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 49
+  - 50
+  - 51
+  - 52
+  - 53
+  - 54
+  - 55
+  - 56
+  - 57
+  - 58
+  - 59
+  - 60
+  - 61
+  - 62
+  - 63
+  - 64
+  - 65
+  - 66
+  - 67
+  - 68
+  - 69
+  - 70
+  - 71
+  - 72
+  - 73
+  - 74
+  - 75
+  - 76
+  - 77
+  - 78
+  - 79
+  - 80
+  - 81
+  - 82
+  - 83
+  - 84
+  - 85
+  - 86
+  - 87
+  - 88
+  - 89
+  - 90
+  - 91
+  - 92
+  - 93
+  - 94
+  - 95
+  - 96
+  - 97
+  - 98
+  - 99
+  libero_spatial_2:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 49
+  - 50
+  - 51
+  - 52
+  - 53
+  - 54
+  - 55
+  - 56
+  - 57
+  - 58
+  - 59
+  - 60
+  - 61
+  - 62
+  - 63
+  - 64
+  - 65
+  - 66
+  - 67
+  - 68
+  - 69
+  - 70
+  - 71
+  - 72
+  - 73
+  - 74
+  - 75
+  - 76
+  - 77
+  - 78
+  - 79
+  - 80
+  - 81
+  - 82
+  - 83
+  - 84
+  - 85
+  - 86
+  - 87
+  - 88
+  - 89
+  - 90
+  - 91
+  - 92
+  - 93
+  - 94
+  - 95
+  - 96
+  - 97
+  - 98
+  - 99
+  libero_spatial_3:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 49
+  - 50
+  - 51
+  - 52
+  - 53
+  - 54
+  - 55
+  - 56
+  - 57
+  - 58
+  - 59
+  - 60
+  - 61
+  - 62
+  - 63
+  - 64
+  - 65
+  - 66
+  - 67
+  - 68
+  - 69
+  - 70
+  - 71
+  - 72
+  - 73
+  - 74
+  - 75
+  - 76
+  - 77
+  - 78
+  - 79
+  - 80
+  - 81
+  - 82
+  - 83
+  - 84
+  - 85
+  - 86
+  - 87
+  - 88
+  - 89
+  - 90
+  - 91
+  - 92
+  - 93
+  - 94
+  - 95
+  - 96
+  - 97
+  - 98
+  - 99
+state_pool_overlap_policy: fresh formal IDs 0-99; reserved Pilot ID 100; no native
+  development object-layout duplicates
 mask:
   conditions:
   - Baseline
@@ -73,10 +486,29 @@ mask:
   - 128
   - 128
   geometry: fixed_centroid_square
-  placement_destination_definitions: null
-  background_anchors: null
+  placement_destination_definitions:
+    libero_spatial_0: plate_1 visible geom pixels
+    libero_spatial_1: plate_1 visible geom pixels
+    libero_spatial_2: plate_1 visible geom pixels
+    libero_spatial_3: plate_1 visible geom pixels
+  background_anchors:
+    libero_spatial_0:
+    - 320
+    - 460
+    libero_spatial_1:
+    - 190
+    - 470
+    libero_spatial_2:
+    - 320
+    - 460
+    libero_spatial_3:
+    - 320
+    - 460
   reviewed_region_files:
   - configs/regions_task0.json
+  - configs/screening/regions_libero_spatial_1.json
+  - configs/screening/regions_libero_spatial_2.json
+  - configs/screening/regions_libero_spatial_3.json
 inference:
   batch_size: 1
   n_envs: 1
@@ -86,7 +518,8 @@ inference:
   matmul_allow_tf32: true
   cudnn_benchmark: true
   seed: 42
-  seed_scope: before_each_rollout
+  seed_scope: policy before each rollout; environment reset seed from exact state
+    bundle
   order_seed: 20261115
   control_mode: relative
   horizon: 280
@@ -108,5 +541,8 @@ exclusions:
   incomplete_blocks: forbid_analysis_until_repaired
   duplicate_independent_units: forbidden
   pilot_or_screening_data_in_formal_analysis: forbidden
-formal_entrypoint_enabled: false
+formal_entrypoint_enabled: true
 candidate_order_confirmed_by_user: true
+formal_execution_authorized: false
+preferred_protocol_file: configs/formal_fresh100_protocol.json
+alternative_protocol_file: configs/formal_fresh50_protocol.json
