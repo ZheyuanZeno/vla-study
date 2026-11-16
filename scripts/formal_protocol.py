@@ -51,8 +51,13 @@ def validate_protocol(path,require_approval=True):
     if commit!=source['lerobot']['commit']: raise ValueError('LeRobot source commit changed')
     if protocol['conditions']!=CONDITIONS: raise ValueError('Need exact seven conditions')
     n=protocol['sample_size_per_task']
-    if n!=50 or protocol['state_pool_type']!='native':
-        raise ValueError('Only the validated native 50-state proposal is currently supported; expanded pools need validation')
+    pool_type=protocol['state_pool_type']
+    if pool_type=='native':
+        if n!=50: raise ValueError('The native pool has only 50 states')
+    elif pool_type=='generated_seeded_reset':
+        if n not in [50,100] or protocol.get('environment_reset_seed_mode')!='per_state_bundle':
+            raise ValueError('Generated proposal requires the validated 50/100 split and per-state reset seed')
+    else: raise ValueError('Unknown initial-state pool type')
     if protocol['planned_rollouts']!=4*7*n: raise ValueError('Incorrect rollout total')
     tasks=protocol['tasks']
     if len(tasks)!=4 or len({(t['suite'],t['task_id']) for t in tasks})!=4: raise ValueError('Need four unique tasks')
@@ -75,14 +80,40 @@ def validate_protocol(path,require_approval=True):
         actual=np.asarray(get_task_init_states(_get_suite(task['suite']),task['task_id']))
         if hashlib.sha256(actual.tobytes()).hexdigest()!=task['native_pool_sha256']:
             raise ValueError('Installed initial-state pool changed')
-        if task['state_ids']!=list(range(50)): raise ValueError('Native proposal must use the explicit 50 IDs exactly once')
+        if task['state_ids']!=list(range(n)): raise ValueError('Proposal must use its explicit state IDs exactly once')
+        if pool_type=='generated_seeded_reset':
+            from src.runner.state_pool import load_state_pool,nearest_position_distance
+            for name in ['state_pool','state_pool_manifest']:
+                if file_sha(task[name+'_file'])!=task[name+'_sha256']: raise ValueError('Generated pool evidence changed')
+            pool=load_state_pool(task['state_pool_file'],task['state_pool_manifest_file'])
+            if len(pool.states)!=101 or pool.manifest['formal_state_ids']!=list(range(100)) or pool.manifest['pilot_state_id']!=100:
+                raise ValueError('Fresh formal/Pilot split differs')
+            if pool.manifest['policy_inference_performed'] is not False or pool.manifest['formal_rollouts_started'] is not False:
+                raise ValueError('Generation evidence must precede policy outcomes')
+            if pool.manifest['native_pool_sha256']!=task['native_pool_sha256']:
+                raise ValueError('Generated/native comparison pool differs')
+            if pool.manifest['generation_manifest']['regions_sha256']!=task['regions_sha256']:
+                raise ValueError('Generated-state geometry used different regions')
+            native_positions_file=pool.path.with_name('native_object_positions.npy')
+            if file_sha(native_positions_file)!=pool.manifest['native_positions_sha256']: raise ValueError('Native position reference changed')
+            references=list(np.load(native_positions_file))
+            for positions in pool.object_positions:
+                distance=nearest_position_distance(positions,references)
+                if distance is not None and distance<pool.manifest['minimum_object_position_linf_m']:
+                    raise ValueError('Generated pool repeats a physical object layout')
+                references.append(positions)
         pilot_rows=[json.loads(line) for line in Path(task['pilot_results_file']).read_text().splitlines() if line.strip()]
         valid_pilot=[r for r in pilot_rows if r['status']!='infrastructure_failure']
         if any(r['code_hash']!=protocol['execution_code_hash'] or r['checkpoint_revision']!=protocol['checkpoint_revision'] for r in valid_pilot):
             raise ValueError('Pilot code/checkpoint differs from frozen proposal')
+        if pool_type=='generated_seeded_reset':
+            if len(valid_pilot)!=7 or any(r['state_id']!=100 or r['initial_state_pool_sha256']!=pool.sha256 for r in valid_pilot):
+                raise ValueError('Pilot does not use the independent reserved state 100')
         verification=json.loads(Path(task['pilot_verification_file']).read_text())
         if verification['valid_rollouts']!=7 or not all(b['seven_complete'] and b['saved_actual_inputs_verified'] for b in verification['blocks']):
             raise ValueError('Selected task pilot not verified')
+        if pool_type=='generated_seeded_reset' and not all(b.get('state_pool_replay_verified') and b.get('full_state_bundle_verified') and b.get('policy_rng_paired_verified') for b in verification['blocks']):
+            raise ValueError('Fresh pilot lacks full fixture/dynamic/RNG pairing proof')
         audit=json.loads(Path(task['geometry_audit_file']).read_text())
         if not audit['all_passed'] or len(audit['records'])!=50: raise ValueError('Geometry not validated across native pool')
     if require_approval:
@@ -104,5 +135,8 @@ def validate_run_config(config):
         'seed':protocol['inference']['seed'],'order_seed':protocol['inference']['order_seed'],
         'horizon':280,'regions_file':task['regions_file'],'output_dir':task['formal_output_dir'],
         'record_video':protocol['record_video']}
+    if protocol['state_pool_type']=='generated_seeded_reset':
+        expected.update(initial_state_pool=task['state_pool_file'],initial_state_pool_manifest=task['state_pool_manifest_file'])
+    elif config.get('initial_state_pool'): raise ValueError('Native proposal cannot use a different pool')
     if any(config.get(k)!=v for k,v in expected.items()): raise ValueError('Run config differs from frozen approved protocol')
     return protocol

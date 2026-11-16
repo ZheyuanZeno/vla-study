@@ -26,12 +26,17 @@ def blocks_from_rows(rows,phase='formal',expected_tasks=4,allow_synthetic=False)
         if (row['status']=='success') != row['success']: raise ValueError('Inconsistent success/status')
         if row['condition'] in unit: raise ValueError('Duplicate completed condition in paired block')
         unit[row['condition']]=row
-    blocks=defaultdict(list)
+    blocks=defaultdict(list); seen_units=defaultdict(set)
     for (task,state),unit in sorted(units.items()):
         if set(unit)!=set(CONDITIONS):
             raise ValueError(f'Incomplete block {task}/{state}: missing {set(CONDITIONS)-set(unit)}')
         state_hashes={r['state_sha256'] for r in unit.values()}
         if len(state_hashes)!=1: raise ValueError('Paired conditions used different initial states')
+        bundle_ids={r.get('initial_state_bundle_id',r['state_sha256']) for r in unit.values()}
+        if len(bundle_ids)!=1: raise ValueError('Paired conditions used different initial state bundles')
+        bundle_id=next(iter(bundle_ids))
+        if bundle_id in seen_units[task]: raise ValueError('Duplicate physical initial-state block under different IDs')
+        seen_units[task].add(bundle_id)
         blocks[task].append([int(unit[c]['success']) for c in CONDITIONS])
     if len(blocks)!=expected_tasks: raise ValueError(f'Expected {expected_tasks} tasks, got {len(blocks)}')
     return {f'{suite}:{task}':np.asarray(values,dtype=np.float64) for (suite,task),values in blocks.items()},infrastructure

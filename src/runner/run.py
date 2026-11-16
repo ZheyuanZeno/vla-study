@@ -30,24 +30,32 @@ from lerobot.utils.random_utils import set_seed
 from src.masking.policy_hook import image_intervention
 from src.runner.regions import prepare_regions
 from src.runner.storage import atomic_json, rebuild_index, recover_interrupted
+from src.runner.state_pool_runtime import bind_configured_pool,initial_state_evidence
 
 CONDITIONS=['Baseline','T1','T2','T3','B1','B2','B3']
 
 
-def execute_episode(vec,policy,processors,config,regions,state_id,condition,output):
+def execute_episode(vec,policy,processors,config,regions,state_id,condition,output,pool=None):
     output.mkdir(parents=True,exist_ok=True)
     env=vec.envs[0]
     original_reset,original_step=env.reset,env.step
     context={'ready':False,'square':None,'geometry':None}
     steps=[]; frames=[]
     state=np.asarray(env._init_states[state_id])
+    environment_seed=config['seed'] if pool is None else int(pool.reset_seeds[state_id])
     def reset(*args,**kwargs):
+        if pool is not None:
+            # This also covers upstream automatic cleanup resets after success.
+            env.init_state_id=state_id
+            kwargs['seed']=environment_seed
         obs,info=original_reset(*args,**kwargs)
         if not context['ready']:
             if regions is not None:
                 context['square'],context['geometry']=prepare_regions(env,obs,regions,condition,output)
             elif condition!='Baseline':
                 raise ValueError('Occlusion requires reviewed regions')
+            context['initial_evidence']=initial_state_evidence(env,pool,state_id,state,output)
+            context['policy_cuda_rng_sha256']=hashlib.sha256(torch.cuda.get_rng_state().cpu().numpy().tobytes()).hexdigest()
             context['ready']=True
             np.save(output/'initial_state.npy',state)
             settled=np.asarray(env._env.get_sim_state())
@@ -74,11 +82,17 @@ def execute_episode(vec,policy,processors,config,regions,state_id,condition,outp
     started=time.monotonic()
     result={'success':None,'error_type':None,'status':'infrastructure_failure','mask_geometry':None,
             'target_coverage':None,'background_anchor':None if regions is None else regions['background_anchor'],
-            'state_sha256':hashlib.sha256(state.tobytes()).hexdigest()}
+            'state_sha256':hashlib.sha256(state.tobytes()).hexdigest(),
+            'policy_seed':config['seed'],'environment_reset_seed':environment_seed,
+            'initial_state_origin':'native_benchmark' if pool is None else 'generated_seeded_reset',
+            'initial_state_pool_file':None if pool is None else str(pool.path),
+            'initial_state_pool_manifest_file':None if pool is None else str(pool.path.with_name('pool.json')),
+            'initial_state_pool_sha256':None if pool is None else pool.sha256,
+            'initial_state_pool_manifest_sha256':None if pool is None else pool.manifest_sha256}
     try:
         with image_intervention(policy,lambda:context['square'],output) as calls:
             with torch.no_grad():
-                data=rollout(vec,policy,*processors[:2],*processors[2:],seeds=[config['seed']])
+                data=rollout(vec,policy,*processors[:2],*processors[2:],seeds=[environment_seed])
             result['inference_calls']=calls()
         assert len(steps)>0 and result['inference_calls']==len(steps)
         success=bool(data['success'].any().item())
@@ -96,6 +110,8 @@ def execute_episode(vec,policy,processors,config,regions,state_id,condition,outp
         env.reset,env.step=original_reset,original_step
         result.update(env_steps=len(steps),elapsed_time=time.monotonic()-started,
             gpu_peak_allocated_bytes=torch.cuda.max_memory_allocated(),gpu_peak_reserved_bytes=torch.cuda.max_memory_reserved())
+        result.update(context.get('initial_evidence',{}))
+        result['policy_cuda_rng_sha256']=context.get('policy_cuda_rng_sha256')
         result['settled_state_sha256']=context.get('settled_state_sha256')
         result['mask_geometry']=context['geometry']
         result['target_coverage']=None if context['geometry'] is None else context['geometry']['target_coverage']
@@ -178,6 +194,7 @@ def main():
     envs=make_env(env_cfg,n_envs=1,use_async_envs=False)
     vec=envs[config['suite']][config['task_id']]
     try:
+        pool=bind_configured_pool(vec,config)
         policy=SmolVLAPolicy.from_pretrained(snapshot,config=cfg,strict=True); policy.eval()
         assert next(policy.parameters()).device.type=='cuda'
         pre,post=make_pre_post_processors(cfg,pretrained_path=snapshot,preprocessor_overrides={
@@ -186,7 +203,8 @@ def main():
         processors=(env_pre,env_post,pre,post)
         runtime_flags={'matmul_allow_tf32':torch.backends.cuda.matmul.allow_tf32,
             'cudnn_benchmark':torch.backends.cudnn.benchmark,'cudnn_allow_tf32':torch.backends.cudnn.allow_tf32,
-            'seed_scope':'reset immediately before each rollout','use_amp':cfg.use_amp,
+            'seed_scope':'policy seed before each rollout; environment seed is recorded per state',
+            'environment_seed_mode':'fixed_policy_seed' if pool is None else 'per_state_bundle','use_amp':cfg.use_amp,
             'parameter_dtypes':sorted({str(p.dtype) for p in policy.parameters()})}
         atomic_json(root/'inference_settings.json',{'policy':asdict(cfg),'runtime':runtime_flags})
         new_count=0
@@ -201,7 +219,7 @@ def main():
                 'data_origin':'real_rollout','attempt_dir':str(attempt),'runtime_flags':runtime_flags,
                 'machine_id':config.get('machine_id',socket.gethostname()),'config_version':config.get('config_version','v1')}
             atomic_json(attempt/'attempt_manifest.json',metadata)
-            result=execute_episode(vec,policy,processors,config,regions,state_id,condition,attempt)
+            result=execute_episode(vec,policy,processors,config,regions,state_id,condition,attempt,pool=pool)
             result.update(metadata)
             result.update(task_id=config['task_id'],suite=config['suite'],state_id=state_id,condition=condition,
                 seed=config['seed'],order_seed=config['order_seed'],machine_id=config.get('machine_id',socket.gethostname()),

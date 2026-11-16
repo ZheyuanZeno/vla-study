@@ -40,7 +40,7 @@ def main():
             raise ValueError('Results do not match approved formal protocol')
         subprocess.run([sys.executable,'-m','src.runner.verify','--root',str(root)],check=True)
         inputs.append(str(results))
-    subprocess.run([sys.executable,'-m','src.analysis.run','--input',*inputs,'--output','artifacts/formal_v1/analysis'],check=True)
+    subprocess.run([sys.executable,'-m','src.analysis.run','--input',*inputs,'--output',protocol.get('analysis_output_dir','artifacts/formal_v1/analysis')],check=True)
 
 
 if __name__=='__main__':main()

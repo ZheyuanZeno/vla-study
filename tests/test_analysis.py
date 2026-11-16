@@ -43,3 +43,13 @@ def test_infrastructure_failure_requires_repaired_complete_block():
     with pytest.raises(ValueError,match='Incomplete'): blocks_from_rows(rows[:-1]+[fault],allow_synthetic=True)
     blocks,failures=blocks_from_rows(rows+[fault],allow_synthetic=True)
     assert len(failures)==1 and len(blocks)==4
+
+
+def test_full_fixture_bundle_mismatch_and_aliased_units_are_rejected():
+    rows=synthetic_rows()
+    for row in rows:row['initial_state_bundle_id']=f"synthetic-bundle-{row['task_id']}-{row['state_id']}"
+    rows[0]['initial_state_bundle_id']='wrong-fixture-layout'
+    with pytest.raises(ValueError,match='bundles'):blocks_from_rows(rows,allow_synthetic=True)
+    rows=synthetic_rows()
+    for row in rows:row['initial_state_bundle_id']=f"synthetic-same-bundle-{row['task_id']}"
+    with pytest.raises(ValueError,match='Duplicate physical'):blocks_from_rows(rows,allow_synthetic=True)

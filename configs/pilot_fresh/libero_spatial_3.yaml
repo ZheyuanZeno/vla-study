@@ -1,0 +1,23 @@
+study_phase: pilot
+checkpoint: HuggingFaceVLA/smolvla_libero
+suite: libero_spatial
+task_id: 3
+state_ids:
+- 100
+conditions:
+- Baseline
+- T1
+- T2
+- T3
+- B1
+- B2
+- B3
+seed: 42
+order_seed: 20261115
+horizon: 280
+record_video: true
+regions_file: configs/screening/regions_libero_spatial_3.json
+initial_state_pool: artifacts/generated_states_v1/libero_spatial_3/states.npz
+initial_state_pool_manifest: artifacts/generated_states_v1/libero_spatial_3/pool.json
+output_dir: artifacts/pilot_fresh_v1/libero_spatial_3
+config_version: generated-pool-reserved100-pilot-v1
