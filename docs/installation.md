@@ -33,6 +33,8 @@ PyTorch 2.7.1 与 torchvision 0.22.1 使用 cu126，torchcodec 0.5.0 与 torch 2
 
 ## 从新终端安装
 
+新机器先克隆本仓库并进入其根目录；下面的 `/home/zy/vla_study` 是原机器路径，可替换为克隆位置。Conda 安装不在 `$HOME/miniconda3` 时，先设置 `CONDA_BASE`，或使用已初始化 Conda 的终端。安装步骤包含依赖下载；只有准备好恢复环境时才执行，不会在 GitHub 上传过程中自动执行。
+
 ```bash
 cd /home/zy/vla_study
 conda env create -f environment.yml

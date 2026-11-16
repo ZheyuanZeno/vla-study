@@ -1,0 +1,227 @@
+{
+  "scope": "Frozen preparation metadata and initial-state pools; excludes raw episode inputs, actions, frames, videos and model/environment binaries",
+  "archive": "preparation-metadata.tar.gz",
+  "archive_sha256": "2d8fd33d7ebe4c49905afdf223d001556a045396b89255bb590e117125981577",
+  "files": [
+    {
+      "path": "artifacts/conda-environment.yml",
+      "bytes": 5464,
+      "sha256": "3379be1fcff5ebdfcc673469a9dd7aa861b13d0aff871ae71cda10f534b3798d"
+    },
+    {
+      "path": "artifacts/environment.json",
+      "bytes": 4333,
+      "sha256": "3d5cfa29f31aaf94959206111c9a15c0e224ecbbe085477e4201207985eda455"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_0/generation_manifest.json",
+      "bytes": 978,
+      "sha256": "9b8f7e0be534b2a33ecb9aa789de42ff89a8df85f58bf6b30210a2ef51345005"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_0/native_object_positions.npy",
+      "bytes": 6128,
+      "sha256": "dfc72c3a27562a1529a1dab86aae80a505324a0c4ec4858008e3a26608e8f34a"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_0/pool.json",
+      "bytes": 208013,
+      "sha256": "f9f38ad268aeecd7ca348c34ccce7d2cb17590fc8416444254a4fcfee3071ff8"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_0/states.npz",
+      "bytes": 81516,
+      "sha256": "a1d36e0d67dd18df41355950b187536882ee1a3bbbf50edd292ece2844550a55"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_1/generation_manifest.json",
+      "bytes": 978,
+      "sha256": "77a6c12b6eb2b2cd4d797d2e0da6b68c9c72ee1af5ee4efa08828d303a2fe3de"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_1/native_object_positions.npy",
+      "bytes": 6128,
+      "sha256": "eb06d7ec5624b4ad9a2e9d8d67a01558c7f945095861e385042c8b74b90cae37"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_1/pool.json",
+      "bytes": 208004,
+      "sha256": "2e3398464675c85da62a1d798b6c8848040fe60aa02fc1376803a01b0653ee58"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_1/states.npz",
+      "bytes": 63419,
+      "sha256": "8881265e05033cb61c9744a8c6598cb71ceb90249f5ab250fe3cd9bd5edbe5a9"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_2/generation_manifest.json",
+      "bytes": 978,
+      "sha256": "3f30a4d8caf69d4321684654b91c72a0d6613ffcc610a6aabef1928ff8fb2b19"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_2/native_object_positions.npy",
+      "bytes": 6128,
+      "sha256": "cf35de9489af1d168568f5767a34fc82793da25646a713b5eb9b840a34fbee20"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_2/pool.json",
+      "bytes": 208667,
+      "sha256": "ffe1daaa4a82d1aecc933925df467e6aa45d29450e8232dd815d24c3086a6810"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_2/states.npz",
+      "bytes": 69806,
+      "sha256": "66f3705227c3d6d3ce2eefe93295743b357da6d81289e6cc35e122e8bfa867c0"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_3/generation_manifest.json",
+      "bytes": 978,
+      "sha256": "34263725d31ff3f12ce3638ba7188a8da2bddb3834ffda19148624216a1b9aef"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_3/native_object_positions.npy",
+      "bytes": 6128,
+      "sha256": "1a14e8cdcb949d49f4ee11859ac0bf8d68ec371e389a7e917f55e1fa97b9ff99"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_3/pool.json",
+      "bytes": 208020,
+      "sha256": "2a640e033d65aa43507b5f316cfd36b18b3f7c6a1affec3c97a7123d9d399fd3"
+    },
+    {
+      "path": "artifacts/generated_states_v1/libero_spatial_3/states.npz",
+      "bytes": 66926,
+      "sha256": "6a2163ce777014e7e217a9ae3ec175284c92cd4f0fe58a3cbf790b136ea0c0df"
+    },
+    {
+      "path": "artifacts/generated_states_v1/validation_summary.json",
+      "bytes": 2589,
+      "sha256": "d7a6ca1718dc24c95156bcc58d3c0fef8c1431c8c0dfc13bf4effdda9dd641cf"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_0/results.jsonl",
+      "bytes": 18109,
+      "sha256": "35669faec812dc6b287df666d4cd73d0714c967322147892e974239fbb7776e2"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_0/verification.json",
+      "bytes": 581,
+      "sha256": "e0a64ee07614df7b9e9781d0c99fc42354573f611ad02720507deef55389e237"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_1/results.jsonl",
+      "bytes": 18025,
+      "sha256": "9332a35595d64952399f9c008c01551a09cf79dc430f4dfa8f262dd56c85e261"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_1/verification.json",
+      "bytes": 581,
+      "sha256": "d6b2bb5fde5e535c0bcb8864943055693f4a066515a10502a3cef636c698b0bd"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_2/results.jsonl",
+      "bytes": 18007,
+      "sha256": "3a089178e70481ed09c40949f69afca7b354772ec1a3c71ce54525b06fa8cf6f"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_2/verification.json",
+      "bytes": 581,
+      "sha256": "1ac550d5ce6fdd8b30ffe348017b0dc8b948c2d95cebbaf3cff3baea10353a11"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_3/results.jsonl",
+      "bytes": 17990,
+      "sha256": "f62ba55cd15da6e0b14ef317cccb7376ed29d9b74abaa3059a40d8cd44dfc353"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/libero_spatial_3/verification.json",
+      "bytes": 581,
+      "sha256": "a6ef52f3c84506a7fd861f8eed045e3fa007a4a1da6948709962d09b416d6e04"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/validation_summary.json",
+      "bytes": 742,
+      "sha256": "cd35544d8561819b4b4beb3f9a7d3b606b617d5226fdec85cf787c66b9c1c998"
+    },
+    {
+      "path": "artifacts/pilot_fresh_v1/video_verification.json",
+      "bytes": 5373,
+      "sha256": "637badeb838653721db37f7b89d173d36349259a8542b3468bd458789a862bf5"
+    },
+    {
+      "path": "artifacts/pip-freeze.txt",
+      "bytes": 3197,
+      "sha256": "1963ed461824b798c037a7ae8e3c4a701e986e796763463e2369e1db1b360c2a"
+    },
+    {
+      "path": "artifacts/region_audit_spatial_1/audit.json",
+      "bytes": 77565,
+      "sha256": "33b1dca666cafce246bdc59cd824d8e2e9dc97db7d4e8f1ef797a4c2b717e497"
+    },
+    {
+      "path": "artifacts/region_audit_spatial_2/audit.json",
+      "bytes": 77580,
+      "sha256": "dc07237ea57f7418e7a14973ba7473b581d614d52aa52f986f7cea83fc0b1b59"
+    },
+    {
+      "path": "artifacts/region_audit_spatial_3/audit.json",
+      "bytes": 77576,
+      "sha256": "d95742c9e82ce841b8f495289ccb2826147cace1c91dabf03ff753880f5f7ac6"
+    },
+    {
+      "path": "artifacts/region_audit_task0/audit.json",
+      "bytes": 77554,
+      "sha256": "3851e01e53ff278dd346e193006c6f5dd5d3973cbed14f1e8cc9fe68c7d89b28"
+    },
+    {
+      "path": "artifacts/screening_v1/libero_spatial_0/results.jsonl",
+      "bytes": 30200,
+      "sha256": "518f5f337f3168414e2d688d73dddd1ddc6353b65e627cd427440e927f4188ef"
+    },
+    {
+      "path": "artifacts/screening_v1/libero_spatial_1/results.jsonl",
+      "bytes": 29945,
+      "sha256": "5c3e39938675403f6ca6019029be30e77ff5820f72e6f078dc413c5c21c2be77"
+    },
+    {
+      "path": "artifacts/screening_v1/libero_spatial_2/results.jsonl",
+      "bytes": 29908,
+      "sha256": "9b1183557ffb69c60008f562e596a6ef83ca2128146d95f363f27bae6574a5e2"
+    },
+    {
+      "path": "artifacts/screening_v1/libero_spatial_3/results.jsonl",
+      "bytes": 29872,
+      "sha256": "8cf3f3447f98beb377801d202236cb76fea69d2516b278872655aaf502364aa2"
+    },
+    {
+      "path": "artifacts/screening_v1/selection.json",
+      "bytes": 6091,
+      "sha256": "6a5ef030e945818f8fa8de33c4a47eaa47fb0f9537bb7d50ca9bae648746d06f"
+    },
+    {
+      "path": "artifacts/state_inventory.json",
+      "bytes": 82616,
+      "sha256": "221c2aa89878427e303fd305b5f8d27acc6b9c2788ed2dcc323e74c40d260e05"
+    },
+    {
+      "path": "logs/check-formal-fresh100.log",
+      "bytes": 651,
+      "sha256": "b973371ef5b94797ccc69f1ff0e75a270a8ee38e34bb9ea8b32687b9139cb9c7"
+    },
+    {
+      "path": "logs/check-formal-fresh50.log",
+      "bytes": 651,
+      "sha256": "3a8b7b9776f869a0d4d026c17c5b634ab6bc3765c7dd8c4a9c34d0e86fb0812b"
+    },
+    {
+      "path": "logs/tests-fresh-pilot-frozen.log",
+      "bytes": 1306,
+      "sha256": "44ba1e535a8fd40b73893a039fc6ae750422816b2656a7ad326923c9a6d27b10"
+    },
+    {
+      "path": "logs/verify-pilot-fresh-videos.log",
+      "bytes": 40,
+      "sha256": "3a0224cfdd0dda532cc3160fcc55822605d0f6c42feea7f17ad0b91ff0e78905"
+    }
+  ]
+}

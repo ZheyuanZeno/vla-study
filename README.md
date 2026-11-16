@@ -2,6 +2,8 @@
 
 本机 Ubuntu 22.04.5 / RTX 3060 6GB，使用隔离 Conda 环境 smolvla-libero。全部计算在本机，不使用 Docker、远程推理或训练。
 
+仓库包含代码、环境定义、冻结配置和准备阶段元数据。目录说明、克隆恢复步骤及原始数据的备份范围见 [仓库与恢复说明](docs/repository.md)。模型缓存、Conda 环境二进制和原始视频保留在本机。
+
 真实 Baseline 已成功：LIBERO-Spatial 任务 0、状态 0，75 步，success predicate=True。证据在 artifacts/baseline/20261115T191502Z/，包含实际 camera inputs、动作、设备信息、结果和录像。单个样本不代表整体成功率。
 
 同状态 T1/B1 真实测试通过。首个完整七条件开发 Pilot 已完成：6 次成功，T2 timeout；未删除失败样本。最新 v2 Pilot 对齐官方 TF32/cuDNN 开关，七条件均真实成功，并保留完整运行设置和恢复验证证据。旧诊断与 v2 不合并，重复同一状态不算新增独立样本。
