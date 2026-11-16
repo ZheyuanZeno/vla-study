@@ -49,3 +49,9 @@ python -m pytest tests -q
 区域依据、NumPy 2 分割兼容处理、精确 hook 和几何约定见 [遮挡说明](docs/masking.md)。正式任务筛选、样本量、状态清单和审批的未完成项见 [协议准备状态](docs/protocol_readiness.md) 与 configs/protocol_draft.yaml。原始需求完整保留在 docs/task_specification.txt。
 
 任务 0 的冻结背景 anchor 已在全部 50 个原生状态的真实 reset/segmentation 上通过三档几何审计，证据 artifacts/region_audit_task0/audit.json；该审计没有执行 50 次模型 rollout。
+
+## 2026-11-16 验收归档
+
+已按确认顺序选定 Spatial 0–3，80 次 Baseline 筛选成功数分别为 18/20、16/20、18/20、19/20。预定状态 20 的跨任务七条件 Pilot 共 28 次，21 次成功、7 次 timeout，技术故障为 0；全部完整性、配对与实际输入检查通过。
+
+原生 50 状态/1400 次的未批准备选方案见 configs/formal50_protocol.json，已通过只读校验。小 Pilot 估计约 20.4 小时（含 15% 预留，单状态估计局限较大），PyTorch 分配峰值约 1.20GiB。当前没有批准文件，也没有正式结果。继续验证首选 100 状态所需的扩展池；不能把原生 50 状态重复计算为 100。
