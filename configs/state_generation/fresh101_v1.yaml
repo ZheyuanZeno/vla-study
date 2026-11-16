@@ -1,0 +1,15 @@
+version: fresh101-v1-20261116
+seed_base: 2026111600
+seed_stride_per_task: 10000
+max_candidates_per_task: 500
+accepted_states_per_task: 101
+formal_state_ids: [0, 99]  # inclusive range; reserve ID 100 for Pilot
+pilot_state_id: 100
+policy_seed: 42
+num_steps_wait: 10
+minimum_object_position_linf_m: 0.0001
+state_replay_atol: 1.0e-10
+static_layout_replay_atol: 1.0e-12
+state_filtering: geometry_and_replay_only_no_policy_outcomes
+selected_tasks_file: configs/screening/selected_tasks.json
+output_root: artifacts/generated_states_v1
