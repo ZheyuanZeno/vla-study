@@ -1,8 +1,10 @@
 # SmolVLA + LIBERO 视觉遮挡鲁棒性实验
 
+[英文论文项目页与七条件视频对照](https://zheyuanzeno.github.io/vla-study/project/)包含正式结果和三个配对状态的演示。
+
 本机 Ubuntu 22.04.5 / RTX 3060 6GB，使用隔离 Conda 环境 smolvla-libero。全部计算在本机，不使用 Docker、远程推理或训练。
 
-仓库包含代码、环境定义、冻结配置和准备阶段元数据。目录说明、克隆恢复步骤及原始数据的备份范围见 [仓库与恢复说明](docs/repository.md)。模型缓存、Conda 环境二进制和原始视频保留在本机。
+仓库包含代码、环境定义、冻结配置和准备阶段元数据。目录说明、克隆恢复步骤及原始数据的备份范围见 [仓库与恢复说明](docs/repository.md)。模型缓存、Conda 环境二进制和完整的原始视频集合保留在本机。
 
 真实 Baseline 已成功：LIBERO-Spatial 任务 0、状态 0，75 步，success predicate=True。证据在 artifacts/baseline/20261115T191502Z/，包含实际 camera inputs、动作、设备信息、结果和录像。单个样本不代表整体成功率。
 
