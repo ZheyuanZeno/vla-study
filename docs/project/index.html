@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="A paired evaluation of target and background occlusion in SmolVLA, with synchronized LIBERO-Spatial rollout examples.">
-<title>Evaluating Visual Occlusion Robustness of a Lightweight Vision-Language-Action Model</title>
+<title>Visual Occlusion Robustness of SmolVLA under Destination, Grasp-Object and Background Masking in LIBERO-Spatial</title>
 <link rel="stylesheet" href="style.css">
 <script src="cases.js" defer></script>
 <script src="review.js" defer></script>
 </head>
 <body>
-<header class="wrap masthead"><a href="#" class="brand">SmolVLA / LIBERO</a><nav aria-label="Sections"><a href="#design">Experiment</a><a href="#demos">Rollouts</a><a href="#results">Results</a><a href="https://github.com/ZheyuanZeno/vla-study">Repository ↗</a></nav></header>
+<header class="wrap masthead"><a href="#" class="brand">SmolVLA / LIBERO</a><nav aria-label="Sections"><a href="#design">Experiment</a><a href="#demos">Rollouts</a><a href="#results">Plate results</a><a href="#extension">Bowl results</a><a href="https://github.com/ZheyuanZeno/vla-study">Repository ↗</a></nav></header>
 <main>
 <section class="hero wrap">
-<div><p class="eyebrow">II2202 · KTH Royal Institute of Technology</p><h1>Evaluating Visual Occlusion Robustness of a Lightweight Vision-Language-Action Model</h1>
+<div><p class="eyebrow">II2202 · KTH Royal Institute of Technology</p><h1>Visual Occlusion Robustness of SmolVLA under Destination, Grasp-Object and Background Masking in LIBERO-Spatial</h1>
 <p class="authors">Chenxu Ye · Zheyuan Zhang</p>
-<p class="lede">We paired seven camera conditions on each initial state to test how mask location and size affect whether a robot can move a specified bowl onto a plate.</p>
-<a class="button" href="#demos">Compare the seven conditions ↓</a></div>
+<p class="lede">When a robot moves a bowl onto a plate, does it matter which region disappears from its camera view? We tested the destination plate on 400 starting states and the grasped bowl on 189 of those same states.</p>
+<a class="button" href="#demos">Compare the camera conditions ↓</a></div>
 <figure class="hero-image"><img src="media/096/T2-input.png" width="512" height="512" alt="The external model input, with a gray square partially covering the destination plate"><figcaption>Saved external-camera model input · Spatial 1 · medium target mask</figcaption></figure>
 </section>
 <section class="wrap section" id="design">
@@ -30,10 +30,10 @@
 <p class="muted">Each square stays fixed in image coordinates for the entire rollout. The three percentages describe coverage of the plate, not the full image.</p>
 </section>
 <section class="wrap section" id="demos">
-<p class="eyebrow">Rollout viewer</p><h2>Watch all seven conditions together</h2>
-<p>Spatial 1 asks the robot to pick up the black bowl next to the ramekin and place it on the plate. Each row of clips uses the same starting state. Start with 096, then compare 026 or 072. These three cases illustrate behavior. Aggregate results use all 400 states.</p>
+<p class="eyebrow">Rollout viewer</p><h2>Compare rollouts from the same initial state</h2>
+<p>Spatial 1 asks the robot to pick up the black bowl next to the ramekin and place it on the plate. State 008 is the lowest-numbered Spatial 1 state with all 13 conditions in the paired sample. Compare each bowl mask with the background mask directly below it. States 096, 026 and 072 illustrate the original seven conditions. Matching step numbers aligns elapsed actions across conditions. The robot can reach different manipulation stages at the same step.</p>
 <div class="toolbar">
-<label for="state"><strong>Initial state</strong></label><select id="state"><option value="096">096</option><option value="026">026</option><option value="072">072</option></select>
+<label for="state"><strong>Initial state</strong></label><select id="state"><option value="008">008 · All 13 conditions</option><option value="096">096 · Primary study</option><option value="026">026</option><option value="072">072</option></select>
 <fieldset id="modes"><legend>View</legend>
 <label><input type="radio" name="mode" value="original"> Original</label>
 <label><input type="radio" name="mode" value="reconstruction" checked> Gray overlay</label>
@@ -51,9 +51,10 @@
 <div id="players">
 <div class="baseline-grid"><div id="baseline"></div><div class="viewer-help"><h3>Inspect what crosses the mask</h3><p>Pause or jump to a step, then switch from Gray overlay to Outline. The box stays in place and the original pixels become visible.</p><p>Frame 0 shows the reset. Frame <i>n</i> shows the scene after action <i>n</i>. Shorter clips hold their final frame.</p></div></div>
 <h3>Destination plate masks</h3><div class="clips" id="target"></div>
-<h3>Background masks</h3><div class="clips" id="background"></div>
+<h3>Plate-matched background masks</h3><div class="clips" id="background"></div>
+<div id="object-family"><h3>Grasp-object masks</h3><div class="clips" id="object"></div><h3>Bowl-matched background masks</h3><div class="clips" id="object-background"></div></div>
 </div>
-<details class="evidence"><summary>Saved first model frames for all seven conditions</summary><p>These are the saved <code>masked.png</code> images. The video overlays are reconstructed from external-camera recordings. Model input was saved independently at the first frame only.</p><div class="initial-grid" id="initial"></div></details>
+<details class="evidence"><summary>Saved first model frames for the selected state</summary><p>These are the saved <code>masked.png</code> images. The video overlays are reconstructed from external-camera recordings. Model input was saved independently at the first frame only.</p><div class="initial-grid" id="initial"></div></details>
 </section>
 <section class="wrap section" id="results">
 <p class="eyebrow">Formal outcomes</p><h2>Where the mask was placed mattered</h2>
@@ -75,6 +76,16 @@
 <p>The exploratory change in the gap from small to large was +1.00 pp (95% CI [−3.50, +5.50]). The interval permits changes in either direction. The result is specific to these tasks, camera conditions and checkpoint.</p>
 <p><a href="https://github.com/ZheyuanZeno/vla-study/blob/main/configs/formal_fresh100_protocol.json">Frozen protocol ↗</a></p>
 </section>
+<section class="wrap section" id="extension">
+<p class="eyebrow">Exploratory extension</p><h2>What changes when the square starts on the bowl?</h2>
+<p>We centered the square on the instructed black bowl at reset. O1, O2 and O3 covered at least 25%, 50% and 75% of its visible pixels. Each OB control used the same square dimensions as its O partner at the original background anchor. The square stayed fixed while the bowl could move.</p>
+<p>After observing the plate results and interim extension outcomes, we reduced collection time by retaining all 99 eligible Spatial 0 states and the first 30 distinct states in the randomized order for each remaining task. Two original states had no visible bowl pixels at reset. The 189 complete six-condition blocks yielded 913 successes and 221 timeouts. We archived another 90 rollouts outside this sample.</p>
+<div class="gaps"><div><span>Small · OB1 − O1</span><strong>−7.58 pp</strong><small>95% CI [−14.07, −0.91]</small></div><div><span>Medium · OB2 − O2</span><strong>−5.00 pp</strong><small>95% CI [−11.09, +1.41]</small></div><div><span>Large · OB3 − O3</span><strong>+4.42 pp</strong><small>95% CI [−1.92, +10.76]</small></div></div>
+<p>Spatial 1 had a 40-point advantage for bowl masking over its background control at the two smaller sizes. Spatial 2 favored the background control at every size. Each task carries equal weight in the mean. Pointwise intervals use 5,000 paired bootstrap draws within tasks.</p>
+<div class="table-scroll"><table><caption>Success rates (%) on the 189 shared states. Baseline comes from the original run.</caption><thead><tr><th>Task</th><th>States</th><th>Baseline</th><th>O1</th><th>O2</th><th>O3</th><th>OB1</th><th>OB2</th><th>OB3</th></tr></thead><tbody><tr><th scope="row">Spatial 0</th><td>99</td><td>85.86</td><td>84.85</td><td>84.85</td><td>83.84</td><td>87.88</td><td>84.85</td><td>84.85</td></tr><tr><th scope="row">Spatial 1</th><td>30</td><td>46.67</td><td>60.00</td><td>63.33</td><td>46.67</td><td>20.00</td><td>23.33</td><td>43.33</td></tr><tr><th scope="row">Spatial 2</th><td>30</td><td>83.33</td><td>73.33</td><td>76.67</td><td>76.67</td><td>83.33</td><td>96.67</td><td>96.67</td></tr><tr><th scope="row">Spatial 3</th><td>30</td><td>96.67</td><td>100.00</td><td>100.00</td><td>100.00</td><td>96.67</td><td>100.00</td><td>100.00</td></tr><tr><th scope="row">Equal task mean</th><td>189</td><td>78.13</td><td>79.55</td><td>81.21</td><td>76.79</td><td>71.97</td><td>76.21</td><td>81.21</td></tr></tbody></table></div>
+<figure><a href="media/object-mask-gaps.png"><img loading="lazy" style="width:100%;max-width:920px;height:auto" src="media/object-mask-gaps.png" alt="Task-level and equal-task paired intervals for plate and bowl masks at three sizes"></a><figcaption>Both families compared on the same 189 states. Negative gaps indicate higher success under the object or destination mask than under its paired background control.</figcaption></figure>
+<p>At the large size, the bowl gap exceeded the plate gap by 11.67 percentage points (95% CI [3.48, 20.18]). The large bowl square had a median area of 2,401 pixels, compared with 4,356 for the plate. The families were also collected in separate batches. These differences limit what the contrast can tell us about object identity.</p>
+<p><a href="paired-success-rates.csv" download>Download the 13-condition success rates (CSV)</a></p></section>
 </main>
 <footer class="wrap">II2202 · Autumn 2026 · SmolVLA / LIBERO-Spatial</footer>
 </body></html>

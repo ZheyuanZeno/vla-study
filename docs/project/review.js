@@ -11,14 +11,17 @@ let maxStep;
 let fps;
 const labels = {
   Baseline: 'Baseline', T1: 'T1 · Small', T2: 'T2 · Medium', T3: 'T3 · Large',
+  O1: 'O1 · Small', O2: 'O2 · Medium', O3: 'O3 · Large',
+  OB1: 'OB1 · Small', OB2: 'OB2 · Medium', OB3: 'OB3 · Large',
   B1: 'B1 · Small', B2: 'B2 · Medium', B3: 'B3 · Large',
 };
 
 function buildPlayers(state) {
   const cases = caseSets[state];
-  for (const section of ['baseline', 'target', 'background', 'initial']) {
+  for (const section of ['baseline', 'target', 'background', 'object', 'object-background', 'initial']) {
     byId(section).replaceChildren();
   }
+  byId("object-family").hidden = !cases.some(item => item.condition === "O1");
   maxStep = Math.max(...cases.map((item) => item.steps));
   fps = cases[0].fps;
   seek.max = stepInput.max = maxStep;
@@ -44,10 +47,12 @@ function buildPlayers(state) {
       links.insertAdjacentHTML('beforeend', `<a href="${item.reconstruction}">Reconstruction MP4</a>`);
     }
     const destination = item.condition === 'Baseline' ? 'baseline'
+      : item.condition.startsWith('OB') ? 'object-background'
+      : item.condition.startsWith('O') ? 'object'
       : item.condition.startsWith('T') ? 'target' : 'background';
     byId(destination).append(card);
     const size = item.side ? ` · ${item.side} × ${item.side} px` : '';
-    const coverage = item.side ? ` · ${(item.coverage * 100).toFixed(1)}% plate coverage` : '';
+    const coverage = item.side ? ` · ${(item.coverage * 100).toFixed(1)}% ${item.condition.startsWith('O') ? 'bowl' : 'plate'} coverage` : '';
     byId('initial').insertAdjacentHTML('beforeend', `<figure class="frame">
       <a href="${item.actual}"><img loading="lazy" width="512" height="512" src="${item.actual}" alt="${labels[item.condition]} saved first model input"></a>
       <figcaption class="caption">${labels[item.condition]}${size}${coverage}</figcaption>
@@ -135,7 +140,7 @@ play.addEventListener('click', async () => {
   } catch (error) {
     if (!running || error.name === 'AbortError') return;
     pause();
-    byId('status').textContent = '浏览器无法Play together。可使用下方原始 MP4 链接和各关键帧。';
+    byId('status').textContent = 'Playback could not start. Use the step controls or open an individual MP4.';
   }
 });
 seek.addEventListener('input', () => jump(seek.valueAsNumber));
