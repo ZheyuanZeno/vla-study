@@ -1,6 +1,6 @@
 # SmolVLA + LIBERO 视觉遮挡鲁棒性实验
 
-[英文论文项目页与七条件视频对照](https://zheyuanzeno.github.io/vla-study/project/)包含正式结果和三个配对状态的演示。
+[黑碗遮挡视频 · 三档与等面积背景对照](https://zheyuanzeno.github.io/vla-study/project/#black-bowl) ｜ [盘子遮挡与十三条件同步对照](https://zheyuanzeno.github.io/vla-study/project/#demos)
 
 本机 Ubuntu 22.04.5 / RTX 3060 6GB，使用隔离 Conda 环境 smolvla-libero。全部计算在本机，不使用 Docker、远程推理或训练。
 
